@@ -1,0 +1,71 @@
+<html>
+<head>
+  <style type="text/css">
+    .midashi  {background-color:cyan}
+    .text     {font-size:X-LARGE}
+    .button   {font-size:XX-LARGE}
+		.scr {
+			overflow-x: auto;   /* スクロール表示 */ 
+			overflow-y: auto;     /* スクロール表示 */ 
+			width: 350px;
+			height:400px;
+			border: 4px double #000000; 
+		}
+
+		.sampleTable {
+			table-layout: fixed;
+		}
+  </style>
+	<title>JUICE055</title>
+</head>
+
+<body>
+	<form name="Main" method="post" action="/Juice055/">
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH class="midashi">処理対象月</TH>
+		<TD>{{	Rec.Hizuke	}}</TD>
+		<TH class="midashi">処理病棟</TH>
+		<TD>{{	Rec.Byoto	}}</TD>
+		<TH class="midashi">区分</TH>
+		<TD>
+			{% ifequal Rec.Kubun "1" %}
+				男
+			{% else %}
+				女
+			{% endifequal %}		
+		</TD>
+	</TR>
+</TABLE>
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH class="midashi">患者</TH>
+		<TD width='200'>{{ Rec.KanzyaCD }}</TD>
+		<TD width='300'>{{ Rec.Kanzya }}</TD>
+	</TR>
+</TABLE>
+
+<TABLE BORDER="1" class="sampleTable">
+	{% for RecIdo in SnapIdo %}
+	<TR>
+		<TD width='200px'>
+			<input type='submit' value = '{{RecIdo}}'
+				name='BtnIdo{{RecIdo}}'
+				style="font-size:LARGE;width:198px;"><BR>
+		</TD>
+	</TR>
+	{% endfor %}   
+</TABLE>
+
+{{  LblMsg }}
+	
+<BR>
+<input type="button" class="button"
+		value="終了" onclick="location.href='/Juice050/'">
+
+</form>
+</body>
+</html>
+

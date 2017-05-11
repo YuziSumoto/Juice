@@ -1,0 +1,104 @@
+<html>
+<head>
+  <style type="text/css">
+    .text  {font-size:XX-LARGE}
+    .button  {font-size:X-LARGE;WIDTH: 200px; HEIGHT:40px}
+		.scr {
+			overflow-y: scroll;   /* スクロール表示 */ 
+			width: 570px;
+			height: 400px;
+			border: 4px double #000000; 
+		}
+  </style>
+	<title>患者一覧(Juice910)</title>
+</head>
+
+<body>
+	<form name="Juice910" action="/Juice910/" method="post" style="font-size:X-LARGE">
+	
+	    <table border="1">
+
+				<TR style="background-color:LightGray">
+					<TH Width="104px">
+					  患者番号
+          </TH>
+					<TH Width="188px">
+					  患者名
+          </TH>
+					<TH Width="190px">
+					  カナ名
+          </TH>
+					<TH Width="50px">
+					  有効
+          </TH>
+				</TR>
+
+			</table>
+
+		<DIV class="scr">
+	    <table border="1">
+				<TR> <!-- # 枠幅設定用行なので高さは０ -->
+					<TH Height="0" Width="100px" style="border-style:none">
+          </TH>
+					<TH Height="0" Width="200px" style="border-style:none">
+          </TH>
+					<TH Height="0" Width="200px" style="border-style:none">
+          </TH>
+					<TH Height="0" Width="50px" style="border-style:none">
+          </TH>
+				</TR>
+
+				{{ StrTable|safe }}
+			</table>
+		</DIV>
+
+	    <table border="1">
+
+				<TR>
+					<TH>
+						<input value="{{ Rec.TxtCode }}" name="TxtCode" style="width:104px"/>
+          </TH>
+					<TH>
+						<input value="{{ Rec.TxtName }}" name="TxtName" style="width:188px"/>
+          </TH>
+					<TH>
+						<input value="{{ Rec.TxtKana }}" name="TxtKana" style="width:190px"/>
+          </TH>
+					<TH Width="60px">
+						<input type="checkbox" name="ChkYuko" value="Checked" {{ Rec.ChkYuko }}>有効<BR>
+          </TH>
+				</TR>
+				<TR>
+					<TH>
+          </TH>
+					<TH>
+						<input type="radio" value="1" name="OptSeibetu" class="text"
+						 {{ Rec.OptSeibetu1 }}/>男
+						<input type="radio" value="2" name="OptSeibetu" class="text"
+						 {{ Rec.OptSeibetu2 }}/>女
+
+          </TH>
+					<TH>
+          </TH>
+					<TH Width="60px">
+          </TH>
+				</TR>
+
+			</table>
+
+{{  LblMsg }}
+
+<BR>
+
+<BR>
+	<input type="submit" value = "更新" name="BtnKousin" class="button">
+
+	<input type="button" class="button"
+		value="終了" onclick="location.href='/Juice000/'">
+　　
+
+</form>
+
+</body>
+
+</html>

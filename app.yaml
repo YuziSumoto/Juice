@@ -1,0 +1,62 @@
+application: futaba-juice
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+#処理メニュー
+- url: /Juice000/.* 
+  script: Juice000.app
+
+#登録条件選択
+- url: /Juice010/.*
+  script: Juice010.app
+
+#患者内容一覧
+- url: /Juice020/.*
+  script: Juice020.app
+#データ登録
+- url: /Juice050/.*
+  script: Juice050.app
+#移動登録
+- url: /Juice055/.*
+  script: Juice055.app
+
+#患者一覧
+- url: /Juice030/.*
+  script: Juice030.app
+
+#EXCEL出力
+- url: /Juice025/.*
+  script: Juice025.app
+
+#仮払い登録
+- url: /Juice040/.*
+  script: Juice040.app
+
+#病棟一括入力
+- url: /Juice100/.*
+  script: Juice100.app
+
+#  病棟マスタ更新
+- url: /Juice900/.*
+  script: Juice900.app
+
+#  患者マスタ更新
+- url: /Juice910/.*
+  script: Juice910.app
+#  患者マスタ読込
+- url: /Juice915/.*
+  script: Juice915.app
+
+- url: .*
+  script: Juice000.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"

@@ -1,0 +1,85 @@
+<html>
+<head>
+  <style type="text/css">
+    .midashi  {background-color:cyan}
+    .text     {font-size:X-LARGE}
+    .button   {font-size:XX-LARGE}
+		.scr {
+			overflow-x: auto;   /* スクロール表示 */ 
+			overflow-y: auto;     /* スクロール表示 */ 
+			width: 350px;
+			height:600px;
+			border: 4px double #000000; 
+		}
+		.radio {  /* 大きめラジオボタン */
+			width:20px;
+			height:20px 
+		}
+		/* ---------------------------------------- */
+		/* ▼ラベルごとクリック可能にするための装飾 */
+		/* ---------------------------------------- */
+		label {
+			border: 1px solid #8080ff;
+			border-radius: 9px;
+			padding: 2px 6px 2px 2px;
+			margin-bottom: 4px;
+			display: inline-block;
+			cursor: pointer;
+		}
+		label:hover {
+			background-color: blue;
+			color: white;
+		}
+
+  </style>
+	<title>JUICE030</title>
+</head>
+
+<body>
+	<form name="JUICE030" method="post" action="/Juice030/">
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH class="midashi">処理対象月</TH>
+		<TD>{{	Rec.Nengetu	}}</TD>
+		<TH class="midashi">処理病棟</TH>
+		<TD>{{	Rec.Byoto	}}</TD>
+		<TH class="midashi">区分</TH>
+		<TD>
+			{% ifequal Rec.Kubun "1" %}
+				男
+			{% else %}
+				女
+			{% endifequal %}		
+		</TD>
+	</TR>
+	<TR>
+    <TH Class='Midashi'>検索条件</TH>
+    <TH colspan="3">
+			<input value="{{ Rec.Zyoken }}" name="Zyoken" class="text" />
+    </TH>
+		<TD colspan=2>
+		<input type='submit' value="検索" name='BtnKensaku'
+		style="font-size:X-LARGE">
+    </TD>
+	</TR>
+</TABLE>
+
+<DIV class="scr"> <!-- 患者一覧 -->
+	{% for KanzyaRec in Snap %}
+	<input type='submit' value = '{{ KanzyaRec.Name }}'
+		name='BtnSel{{ KanzyaRec.Code }}'
+		style="font-size:X-LARGE;width:290px;"><BR>
+	{% endfor %}   
+</DIV>
+
+{{  LblMsg }}
+	
+<BR>
+	<input type="button" class="button"
+		value="終了" onclick="location.href='/Juice020/'">
+
+</form>
+</body>
+</html>
+

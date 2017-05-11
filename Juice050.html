@@ -1,0 +1,106 @@
+<html>
+<head>
+  <style type="text/css">
+    .midashi  {background-color:cyan}
+    .text     {font-size:X-LARGE}
+    .button   {font-size:XX-LARGE}
+		.scr {
+			overflow-x: auto;   /* スクロール表示 */ 
+			overflow-y: auto;     /* スクロール表示 */ 
+			width: 370px;
+			height:400px;
+			border: 4px double #000000; 
+		}
+
+		.sampleTable {
+			table-layout: fixed;
+		}
+  </style>
+	<title>JUICE050</title>
+</head>
+
+<body>
+	<form name="Main" method="post" action="/Juice050/">
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH class="midashi">処理対象月</TH>
+		<TD>{{	Rec.Nengetu	}}</TD>
+		<TH class="midashi">処理病棟</TH>
+		<TD>{{	Rec.Byoto	}}</TD>
+		<TH class="midashi">区分</TH>
+		<TD>
+			{% ifequal Rec.Kubun "1" %}
+				男
+			{% else %}
+				女
+			{% endifequal %}		
+		</TD>
+	</TR>
+</TABLE>
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH class="midashi">患者</TH>
+		<TD width='200'>{{ Rec.KanzyaCD }}</TD>
+		<TD width='300'>{{ Rec.Kanzya }}</TD>
+	</TR>
+</TABLE>
+
+
+
+<TABLE BORDER="1" class="sampleTable">
+	<TR> <!--  見出し行 -->
+		<TH Class='Midashi' width='104'>日付</TH>
+		<TH Class='Midashi' width='50'>ＡＭ</TH>
+		<TH Class='Midashi' width='50'>ＰＭ</TH>
+		<TH Class='Midashi' width='120'>移動</TH>
+	</TR>
+</TABLE>
+<DIV class="scr">
+<TABLE BORDER="1" class="sampleTable">
+	{% for RecData in Snap %}
+	<TR>
+			<TH {{ RecData.Style|safe }} width='100'>
+			{{ RecData.Text }}
+			</TH>
+			<TD width='50'>
+				<input type='submit' value = '{{RecData.AM}}'
+				name='BtnAM{{RecData.Day}}'
+				style="font-size:LARGE;width:48px;"><BR>
+			</TD>
+			<TD width='50'>
+				<input type='submit' value = '{{RecData.PM}}'
+				name='BtnPM{{ RecData.Day }}'
+				style="font-size:LARGE;width:48px;"><BR>
+			</TD>
+			<TD width='100'>
+				<input type="button" 	value="{{ RecData.IdoZyoho }}" style="font-size:LARGE;width:118px;"
+				 onclick="location.href='/Juice055/?ByotoCD={{Rec.ByotoCD}}&Kubun={{Rec.Kubun}}&KanzyaCD={{Rec.KanzyaCD}}&Hizuke={{Rec.Nengetu}}/{{RecData.Day}}'">
+			</TD>
+	</TR>
+	{% endfor %}   
+</TABLE>
+</DIV>
+<TABLE BORDER="1" class="sampleTable">
+	<TR> <!--  見出し行 -->
+		<TH Class='Midashi' width='104' rowspan="2">合計</TH>
+		<TH Class='Midashi' width='50'>{{ Rec.AMKei }}</TH>
+		<TH Class='Midashi' width='50'>{{ Rec.PMKei }}</TH>
+	</TR>
+	<TR>
+		<TH Class='Midashi' colspan="2">{{ Rec.Goukei }}</TH>
+	</TR>
+</TABLE>
+
+
+{{  LblMsg }}
+	
+<BR>
+<input type="button" class="button"
+		value="終了" onclick="location.href='/Juice020/'">
+
+</form>
+</body>
+</html>
+

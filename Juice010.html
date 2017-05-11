@@ -1,0 +1,63 @@
+<html>
+<head>
+  <style type="text/css">
+    .midashi  {background-color:cyan}
+    .text     {font-size:X-LARGE}
+    .button   {font-size:XX-LARGE}
+  </style>
+	<title>JUICE010</title>
+</head>
+
+<body>
+	<form name="JUICE010" method="post" action="/Juice010/">
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH>
+			処理対象月
+		</TH>
+		<TD>
+				<select name="CmbNengetu"  class="text">
+					{{ Rec.StrNengetu|safe }}
+				</select>
+		</TD>
+	</TR>
+	<TR>
+		<TH>
+			処理病棟
+		</TH>
+		<TD>
+				<select name="CmbByoto"  class="text">
+					{{ Rec.StrByoto|safe }}
+				</select>
+		</TD>
+	</TR>
+	<TR>
+		<TH>
+			区分
+		</TH>
+		<TD>
+			<input type="radio" value="1" name="OptKubun" class="text"
+			 {{ Rec.OptKubun1 }}/>男
+			<input type="radio" value="2" name="OptKubun" class="text"
+			 {{ Rec.OptKubun2 }}/>女
+		</TD>
+	</TR>
+</TABLE>
+
+<BR>
+
+{{  LblMsg }}
+	
+<BR>
+<input type="submit" value = "個人登録" Name="BtnKettei" style="font-size:XX-LARGE">
+　　　　
+<input type="submit" value = "一括登録" Name="BtnKettei2" style="font-size:XX-LARGE">
+　　　　
+	<input type="button" class="button"
+		value="終了" onclick="location.href='/Juice000/'">
+
+</form>
+</body>
+</html>
+

@@ -1,0 +1,112 @@
+<html>
+<head>
+  <style type="text/css">
+    .midashi  {background-color:cyan}
+    .text     {font-size:X-LARGE}
+    .button   {font-size:XX-LARGE}
+		.scr {
+			overflow-x: auto;   /* スクロール表示 */ 
+			overflow-y: scroll;     /* スクロール表示 */ 
+			width: 530px;
+			height:600px;
+			border: 4px double #000000; 
+		}
+
+		.sampleTable {
+			width: 500px;
+			table-layout: fixed;
+		}
+  </style>
+	<title>JUICE020</title>
+</head>
+
+<body>
+	<form name="JUICE020" method="post" action="/Juice020/">
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH class="midashi">処理対象月</TH>
+		<TD>{{	Rec.Nengetu	}}</TD>
+		<TH class="midashi">処理病棟</TH>
+		<TD>{{	Rec.Byoto	}}</TD>
+		<TH class="midashi">区分</TH>
+		<TD>
+			{% ifequal Rec.Kubun "1" %}
+				男
+			{% else %}
+				女
+			{% endifequal %}		
+		</TD>
+	</TR>
+</TABLE>
+
+<TABLE BORDER="1">
+	<TR>
+		<TH class="midashi">当初仮払</TH>
+		<TD width='50'>
+			{{ Karibarai.Hizuke1|date:"m/d" }}
+		</TD>
+		<TD width='100'>
+			￥{{ Karibarai.Kingaku1 }}
+		</TD>
+		<TH class="midashi">中間仮払</TH>
+		<TD width='50'>
+			{{ Karibarai.Hizuke2|date:"m/d" }}
+		</TD>
+		<TD width='100'>
+			￥{{ Karibarai.Kingaku2 }}
+		</TD>
+		<TH class="midashi">追加仮払</TH>
+		<TD width='50'>
+			{{ Karibarai.Hizuke3|date:"m/d" }}
+		</TD>
+		<TD width='100'>
+			￥{{ Karibarai.Kingaku3 }}
+		</TD>
+	</TR>
+</TABLE>
+
+
+<DIV class="scr">
+<TABLE BORDER="1" class="sampleTable">
+	<TR> <!--  見出し行 -->
+		<TH Class='Midashi' width='100'>患者</TH>
+		<TH Class='Midashi' width='50'>合計</TH>
+		<TH Class='Midashi' width='50'>削除</TH>
+	</TR>
+	{% for RecData in Snap %}
+		<TR> <!--  データ -->
+			<TH Class='Midashi' >
+				<input type='submit' value = '{{ RecData.Name }}'
+					name='BtnSel{{ RecData.KanzyaCD }}'
+					style="font-size:LARGE;width:200px;"><BR>
+			</TH>
+			<TH>{{ RecData.Goukei }}</TH>
+			<TH>
+				<input type='submit' value = '削除'
+					name='BtnDel{{ RecData.KanzyaCD }}'
+					style="font-size:LARGE;width:100px;"><BR>
+			</TH>
+	{% endfor %}   
+
+</TABLE>
+
+<BR>
+</DIV>
+{{  LblMsg }}
+	
+<BR>
+<input type="submit" value = "新規登録" Name="BtnAdd" style="font-size:XX-LARGE">
+　　　　
+<input type="submit" value = "仮払登録" Name="BtnKaribarai" style="font-size:XX-LARGE">
+　　　　
+<input type="button" value = "印刷"
+	onclick="window.open('/Juice025/?Byoto={{ Rec.ByotoCD }}&Nengetu={{Rec.Nengetu}}');" class="button">
+　　　　
+<input type="button" class="button"
+		value="終了" onclick="location.href='/Juice010/'">
+
+</form>
+</body>
+</html>
+

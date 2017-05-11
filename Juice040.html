@@ -1,0 +1,91 @@
+<html>
+<head>
+  <style type="text/css">
+    .midashi  {background-color:cyan}
+    .text     {font-size:X-LARGE}
+    .button   {font-size:XX-LARGE}
+		.scr {
+			overflow-x: scroll;   /* スクロール表示 */ 
+			overflow-y: auto;     /* スクロール表示 */ 
+			width: 700px;
+			height:600px;
+			border: 4px double #000000; 
+		}
+  </style>
+	<title>JUICE040</title>
+</head>
+
+<body>
+	<form name="Main" method="post" action="/Juice040/">
+
+<TABLE BORDER="1" class="text">
+	<TR>
+		<TH class="midashi">
+			処理対象月
+		</TH>
+		<TD>
+			{{	Rec.Nengetu	}}
+		</TD>
+		<TH class="midashi">
+			処理病棟
+		</TH>
+		<TD>
+			{{	Rec.Byoto	}}
+		</TD>
+		<TH class="midashi">
+			区分
+		</TH>
+		<TD>
+			{{	Rec.Seibetu	}}
+		</TD>
+	</TR>
+</TABLE>
+
+<TABLE BORDER="1" class="text">
+  <TR Class='Midashi'>
+    <TH style='width:100px'>区分</TH>
+    <TH style='width:100px'>日付</TH>
+    <TH style='width:100px'>金額</TH>
+  </TR>
+  <TR>
+    <TH Class='Midashi'>当初仮払</TH>
+    <TH>
+			<input value="{{ Rec.TxtHizuke1 }}" name="TxtHizuke1" class="text" />
+    </TH>
+    <TH>
+			<input value="{{ Rec.TxtKingaku1 }}" name="TxtKingaku1" class="text" />
+    </TH>
+  </TR>
+  <TR>
+    <TH Class='Midashi'>中間仮払</TH>
+    <TH>
+			<input value="{{ Rec.TxtHizuke2 }}" name="TxtHizuke2" class="text" />
+    </TH>
+    <TH>
+			<input value="{{ Rec.TxtKingaku2 }}" name="TxtKingaku2" class="text" />
+    </TH>
+  </TR>
+  <TR>
+    <TH Class='Midashi'>追加仮払</TH>
+    <TH>
+			<input value="{{ Rec.TxtHizuke3 }}" name="TxtHizuke3" class="text" />
+    </TH>
+    <TH>
+			<input value="{{ Rec.TxtKingaku3 }}" name="TxtKingaku3" class="text" />
+    </TH>
+  </TR>
+</TABLE>
+
+
+{{  LblMsg }}
+	
+<BR>
+<input type="submit" value = "決定" Name="BtnKettei" style="font-size:XX-LARGE">
+　　　　
+	<input type="button" class="button"
+		value="終了" onclick="location.href='/Juice020/'">
+
+</form>
+</body>
+</html>
+
