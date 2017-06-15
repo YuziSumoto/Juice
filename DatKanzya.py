@@ -13,9 +13,10 @@ class DatKanzya(db.Model):
   def GetList(self,ByotoCD,Nengetu,KanzyaSex):
 
     Sql =  "SELECT * FROM " + self.__class__.__name__
-    Sql +=  " Where ByotoCD     = " + str(ByotoCD) # 病棟
+    Sql +=  " Where ByotoCD     = " + str(ByotoCD)   # 病棟
     Sql +=  "  And  KanzyaSex   = " + str(KanzyaSex) # 性別
     Sql +=  "  And  Hizuke      = DATE('" + Nengetu.replace("/","-")  + "-01"  + "')" # 日付
+    Sql +=  "  Order by Kana "
 
     Snap = db.GqlQuery(Sql)
 

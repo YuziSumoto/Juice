@@ -15,6 +15,7 @@ import common
 
 from MstUser       import *   # 使用者マスタ
 from MstByoto      import *   # 病棟マスタ
+from DatKanzya     import *   # 患者データ
 from DatMeisai     import *   # 明細データ
 from DatKaribarai  import *   # 仮払いデータ
 
@@ -82,87 +83,75 @@ class MainHandler(webapp2.RequestHandler):
     Font3.colour_index = 0x35  # 20倍するとポイントになる
     StyleRed.font        = Font3
 
-    SnapMeisai = DatMeisai().GetList(int(Byoto),Nengetu,Kubun)
+    SnapKanzya = DatKanzya().GetList(int(Byoto),Nengetu,Kubun)
 
     Ctr = 0
 
     AMSum     = [0] * 32 # 性別合計AM
     PMSum     = [0] * 32 # 性別合計PM
 
-#   for Rec in SnapMeisai:
-    for  Ctr in range(1,34):
-      if Ctr <= len(SnapMeisai):
-        Rec = SnapMeisai[Ctr -1]
+    Row = 1
+    WkMeisai = DatMeisai()
 
-      Row = Ctr * 2 + 1
-      Col = 1
-      if Ctr <= len(SnapMeisai):
-        OutStr = "%08d" % getattr(Rec,"KanzyaCode") # 患者コード
-      else:
-        OutStr = ""
-      WorkSheet.write_merge(Row,Row +1 ,Col,Col,OutStr,Style)
+    for RowCtr in range(0,33): # 空行も枠線は引く！
+      Row += 2
+      if RowCtr >= len(SnapKanzya):
+        WorkSheet.write_merge(Row,Row +1 ,1,1,"",Style)
+        WorkSheet.write(Row,2,"",Style)
+        for DayCtr in range(1,32): # 日別ループ
+          OutCol = 4 + (DayCtr - 1) * 2
+          WorkSheet.write(Row,OutCol    ,"",Style)
+          WorkSheet.write(Row,OutCol + 1,"",Style)
+          WorkSheet.write_merge(Row+1,Row+1,OutCol,OutCol + 1,"",Style)
+        WorkSheet.write(Row,3,"",Style)
+        WorkSheet.write(Row + 1,3,"",Style3)
+      else: # 明細無し
+        RecKanzya = SnapKanzya[RowCtr]  # 患者ループ
+        OutStr = "%08d" % RecKanzya.KanzyaCD # 患者コード
+        WorkSheet.write_merge(Row,Row +1 ,1,1,OutStr,Style)
+        WorkSheet.write(Row,2,RecKanzya.Name,Style)
 
-      Col = 2
-      if Ctr <= len(SnapMeisai):
-        OutStr = getattr(Rec,"KanzyaName") # 患者名
-      else:
-        OutStr = ""
-      WorkSheet.write(Row,Col,OutStr,Style)
+        Goukei = 0
+        LastIdo = ""
 
-      # 病棟別本数欄
+        for DayCtr in range(1,32): # 日別ループ
+          OutCol = 4 + (DayCtr - 1) * 2
+          Hizuke = Nengetu + "/" + str(DayCtr)
+          DataRec = WkMeisai.GetRec(Byoto,RecKanzya.KanzyaCD,Hizuke)
+          if DataRec == {}: # データ無し
+            WorkSheet.write(Row,OutCol    ,"",Style)
+            WorkSheet.write(Row,OutCol + 1,"",Style)
+            WorkSheet.write_merge(Row+1,Row+1,OutCol,OutCol + 1,"",Style)
+          else:
+            if  DataRec.AM == 0:
+              WorkSheet.write(Row,OutCol    ,"",Style)
+            else:
+              AMSum[DayCtr] += DataRec.AM
+              Goukei += DataRec.AM
+              WorkSheet.write(Row,OutCol    ,str(DataRec.AM),Style)
+            if  DataRec.PM == 0:
+              WorkSheet.write(Row,OutCol + 1,"",Style)
+            else:
+              PMSum[DayCtr] += DataRec.PM
+              Goukei += DataRec.PM
+              WorkSheet.write(Row,OutCol + 1,str(DataRec.PM),Style)
+            WorkSheet.write_merge(Row+1,Row+1,OutCol,OutCol + 1,DataRec.IdoZyoho,Style3)
+            if DataRec.IdoZyoho == u"退院":
+              LastIdo = "退院"
+            elif  DataRec.IdoZyoho == u"預かり開始":
+              LastIdo = u"預かり開始"
+            elif  DataRec.IdoZyoho == u"預かり中止":
+              LastIdo = u"＊"
+            elif  DataRec.IdoZyoho == u"３病棟へ":
+              LastIdo = u"□"
+            elif  u"へ" in DataRec.IdoZyoho:
+              LastIdo = u"△"
 
-      if Ctr <= len(SnapMeisai):
-        OutStr = DatMeisai().GetAllGoukei(Nengetu,str(getattr(Rec,"KanzyaCode")))
-      else:
-        OutStr = ""
-      WorkSheet.write(Row + 1,Col,OutStr,Style)
-
-      DispStr = ["",u"①",u"②",u"③",u"④"]
-
-      Goukei = 0
-      for DayCtr in range(1,32): # 日別ループ
-        Col =  DayCtr * 2 + 2
-
-        if Ctr <= len(SnapMeisai):
-          AM = getattr(Rec,"AM" + "%02d" % DayCtr )
-          AMSum[DayCtr] += AM
-          PM = getattr(Rec,"PM" + "%02d" % DayCtr )
-          PMSum[DayCtr] += PM
-          Goukei += PM + PM
-          OutStr = DispStr[AM]
+        WorkSheet.write(Row,3,str(Goukei),Style)
+        if len(LastIdo) > 2:
+          WorkSheet.write(Row + 1,3,LastIdo,Style3)
         else:
-          OutStr = ""
-        WorkSheet.write(Row,Col,OutStr,Style2)
-
-        if Ctr <= len(SnapMeisai):
-          OutStr = DispStr[PM]
-        else:
-          OutStr = ""
-        WorkSheet.write(Row,Col+1,OutStr,Style2)
-
-        if Ctr <= len(SnapMeisai):
-          OutStr =  getattr(Rec,"IdoZyoho" + "%02d" % DayCtr )
-        else:
-          OutStr = ""
-        WorkSheet.write_merge(Row + 1,Row +1 ,Col,Col + 1,OutStr,Style3)
-    
-      Col =  3  # 患者合計本数
-
-      if Ctr <= len(SnapMeisai):
-        WorkSheet.write(Row,Col,str(Goukei) + u"本",Style)
-      else:
-        WorkSheet.write(Row,Col,"",Style)
- 
-      Col =  3  # マークセット
-      if Ctr <= len(SnapMeisai):
-        OutStr = DatMeisai().GetMark2(Rec) # マーク欄設定
-      else:
-        OutStr = ""
-
-      if OutStr == u"退院" or OutStr == u"＊" or OutStr == u"預り中止":
-        WorkSheet.write(Row + 1 ,Col,OutStr,StyleRed)
-      else:
-        WorkSheet.write(Row + 1 ,Col,OutStr,Style)
+          WorkSheet.write(Row + 1,3,LastIdo,Style)
 
     return (AMSum,PMSum)
 #=============================================================================
